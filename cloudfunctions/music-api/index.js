@@ -95,23 +95,9 @@ exports.main = async (event, _context) => {
           extend.debug = { event, response, realIp, params, cookie, proxy };
         }
         extend.cookie = response.cookie;
-        if (response.status === 200) {
-          const responseData = response.body;
-          return apiResponse(
-            isSdkRequest,
-            responseData.code,
-            responseData.message,
-            responseData.data,
-            extend
-          );
-        }
-        return apiResponse(
-          isSdkRequest,
-          response.status,
-          response.message,
-          response.body,
-          extend
-        );
+        const responseData = response.body;
+
+        return apiResponse(isSdkRequest, 200, 'success', responseData, extend);
       } catch (error) {
         if (parseInt(error.body.code) === 301) error.body.msg = '需要登录';
         return apiResponse(
